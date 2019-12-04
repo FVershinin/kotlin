@@ -121,7 +121,7 @@ fun PsiReference.matchesTarget(candidateTarget: PsiElement): Boolean {
         val importableTargets = unwrappedTargets.mapNotNull {
             when {
                 it is KtConstructor<*> -> it.containingClassOrObject
-                it is PsiMethod && it is PsiMember && it.isConstructor -> it.containingClass
+                it is PsiMethod && it.isConstructor -> it.containingClass
                 else -> it
             }
         }
