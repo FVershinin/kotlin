@@ -58,7 +58,7 @@ public class TypeIntersector {
             if (KotlinBuiltIns.isNothingOrNullableNothing(type)) {
                 nothingOrNullableNothing = type;
             }
-            allNullable &= TypeUtils.isNullableType(type);
+            allNullable &= type.isMarkedNullable();
             nullabilityStripped.add(TypeUtils.makeNotNullable(type));
         }
 
