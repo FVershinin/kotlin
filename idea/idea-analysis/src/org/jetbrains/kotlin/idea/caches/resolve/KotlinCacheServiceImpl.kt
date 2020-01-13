@@ -16,6 +16,7 @@
 
 package org.jetbrains.kotlin.idea.caches.resolve
 
+import com.intellij.openapi.diagnostic.ControlFlowException
 import com.intellij.openapi.diagnostic.Logger
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.projectRoots.Sdk
@@ -120,12 +121,13 @@ class KotlinCacheServiceImpl(val project: Project) : KotlinCacheService {
     }
 
     private fun getFilesForElements(elements: List<KtElement>): List<KtFile> {
-        return elements.map {
+        return elements.mapNotNull {
             try {
                 // in theory `containingKtFile` is `@NotNull` but in practice EA-114080
                 @Suppress("USELESS_ELVIS")
                 it.containingKtFile ?: throw IllegalStateException("containingKtFile was null for $it of ${it.javaClass}")
             } catch (e: Exception) {
+                if (e is ControlFlowException) return@mapNotNull null
                 throw KotlinExceptionWithAttachments("Couldn't get containingKtFile for ktElement")
                     .withAttachment("element.kt", it.text)
             }
