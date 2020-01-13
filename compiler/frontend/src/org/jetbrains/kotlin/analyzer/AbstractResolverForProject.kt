@@ -204,7 +204,7 @@ private class DelegatingPackageFragmentProvider<M : ModuleInfo>(
 }
 
 private object DiagnoseUnknownModuleInfoReporter {
-    fun report(name: String, infos: List<ModuleInfo>, allModules: Collection<out ModuleInfo>): Nothing {
+    fun report(name: String, infos: List<ModuleInfo>, allModules: Collection<ModuleInfo>): Nothing {
         val message = "$name does not know how to resolve $infos, allModules: $allModules"
         when {
             name.contains(ResolverForProject.resolverForSdkName) -> errorInSdkResolver(message)
