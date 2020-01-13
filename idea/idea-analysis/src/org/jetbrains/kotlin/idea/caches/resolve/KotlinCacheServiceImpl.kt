@@ -121,13 +121,13 @@ class KotlinCacheServiceImpl(val project: Project) : KotlinCacheService {
     }
 
     private fun getFilesForElements(elements: List<KtElement>): List<KtFile> {
-        return elements.mapNotNull {
+        return elements.map {
             try {
                 // in theory `containingKtFile` is `@NotNull` but in practice EA-114080
                 @Suppress("USELESS_ELVIS")
                 it.containingKtFile ?: throw IllegalStateException("containingKtFile was null for $it of ${it.javaClass}")
             } catch (e: Exception) {
-                if (e is ControlFlowException) return@mapNotNull null
+                if (e is ControlFlowException) throw e
                 throw KotlinExceptionWithAttachments("Couldn't get containingKtFile for ktElement")
                     .withAttachment("element.kt", it.text)
             }
